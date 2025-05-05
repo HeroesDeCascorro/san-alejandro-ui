@@ -1,36 +1,38 @@
 // src/components/BedroomCard.js
 import React from 'react';
 import {
-  Card,
-  CardHeader,
-  CardContent,
-  IconButton,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
   Typography,
+  Box,
 } from '@mui/material';
-import { Box } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Carousel from 'react-material-ui-carousel';
-import { ExpandMore } from '@mui/icons-material';
 
 export default function BedroomCard({ room }) {
   return (
-    <Card sx={{ my: 2 }}>
-      <CardHeader
-        title={`${room.name} (${room.size} m²)`}
-        action={<IconButton><ExpandMore /></IconButton>}
-      />
-      <CardContent>
-        <Carousel
-          navButtonsAlwaysVisible
-          indicatorProps={{ style: { marginTop: '8px' } }}
-          sx={{ maxWidth: 400, mx: 'auto' }}
-        >
+    <Accordion sx={{ my: 2 }}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Typography variant="subtitle1">
+          {room.name} {room.size ? `(${room.size} m²)` : ''}
+        </Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Carousel navButtonsAlwaysVisible>
           {room.images.map((img, idx) => (
             <Box
               key={idx}
               component="img"
               src={`/images/${img}`}
               alt={`${room.name} foto ${idx + 1}`}
-              sx={{ width: '100%', borderRadius: 1 }}
+              sx={{
+                width: '100%',
+                height: 300,
+                objectFit: 'contain',
+                backgroundColor: '#000',
+                borderRadius: 1,
+              }}
             />
           ))}
         </Carousel>
@@ -39,7 +41,7 @@ export default function BedroomCard({ room }) {
             {room.description}
           </Typography>
         )}
-      </CardContent>
-    </Card>
+      </AccordionDetails>
+    </Accordion>
   );
 }

@@ -5,14 +5,11 @@ import apartments from '../data/apartments';
 import {
   Container,
   Typography,
-  Grid,
   Box,
 } from '@mui/material';
+import Carousel from 'react-material-ui-carousel';
 import BedroomCard from './BedroomCard';
 import MapSection from './MapSection';
-import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 export default function ApartmentDetail() {
   const { id } = useParams();
@@ -22,59 +19,60 @@ export default function ApartmentDetail() {
   return (
     <Container sx={{ pt: 4, pb: 10 }}>
       <Typography variant="h4" gutterBottom>
-        Apartamento {apt.id}: {apt.bedrooms || apt.rooms.length} hab.
+        Apartamento {apt.id}: {apt.rooms.length} hab.
       </Typography>
       <Typography variant="body1" gutterBottom>
         {apt.description}
       </Typography>
 
-      {/* Salón y baño sótano */}
-      <Grid container spacing={2} sx={{ my: 2 }}>
-        <Grid item xs={12} sm={6}>
-          <Typography variant="h6">Salón</Typography>
-          {apt.publicAreas.salon.map((img,i) => (
+      {/* Carousel Salón */}
+      <Box sx={{ my: 2 }}>
+        <Typography variant="h6" gutterBottom>Salón</Typography>
+        <Carousel navButtonsAlwaysVisible>
+          {apt.publicAreas.salon.map((img, i) => (
             <Box
               key={i}
               component="img"
               src={`/images/${img}`}
-              alt={`Salon ${i+1}`}
-              sx={{ width: '100%', mb: 1, borderRadius: 1 }}
+              alt={`Salón ${i + 1}`}
+              sx={{
+                width: '100%',
+                height: 300,
+                objectFit: 'contain',
+                backgroundColor: '#000',
+                borderRadius: 1,
+              }}
             />
           ))}
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Typography variant="h6">Baño sótano</Typography>
-          {apt.publicAreas.bathBasement.map((img,i) => (
-            <Box
-              key={i}
-              component="img"
-              src={`/images/${img}`}
-              alt={`Baño sótano ${i+1}`}
-              sx={{ width: '100%', mb: 1, borderRadius: 1 }}
-            />
-          ))}
-        </Grid>
-      </Grid>
+        </Carousel>
+      </Box>
 
-      {/* Cards de habitaciones */}
+      {/* Carousel Baño sótano */}
+      <Box sx={{ my: 2 }}>
+        <Typography variant="h6" gutterBottom>Baño compartido</Typography>
+        <Carousel navButtonsAlwaysVisible>
+          {apt.publicAreas.bathBasement.map((img, i) => (
+            <Box
+              key={i}
+              component="img"
+              src={`/images/${img}`}
+              alt={`Baño compartido ${i + 1}`}
+              sx={{
+                width: '100%',
+                height: 300,
+                objectFit: 'contain',
+                backgroundColor: '#000',
+                borderRadius: 1,
+              }}
+            />
+          ))}
+        </Carousel>
+      </Box>
+
+      {/* Habitaciones desplegables */}
       {apt.rooms.map(room => (
         <BedroomCard key={room.name} room={room} />
       ))}
-
-      {/* Calendario de disponibilidad */}
-      <Box sx={{ my: 4 }}>
-        <Typography variant="h6" gutterBottom>
-          Calendario de disponibilidad
-        </Typography>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <StaticDatePicker
-            displayStaticWrapperAs="desktop"
-            value={new Date()}
-            onChange={() => {}}
-            renderInput={() => null}
-          />
-        </LocalizationProvider>
-      </Box>
 
       <MapSection />
     </Container>

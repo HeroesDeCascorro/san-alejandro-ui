@@ -26,13 +26,14 @@ export default function ApartmentCard({ apt }) {
         />
       )}
       <CardContent>
-        <Typography variant="h6">
-          {/* número de habitaciones */}
-          {apt.rooms.length} hab. • { /* bathrooms: si es dúplex imaginamos 1 en sótano + nº de baños? */}
-          {apt.type === 'dúplex'
+      <Typography variant="h6">
+        {/* número de habitaciones */}
+        {apt.rooms.length} hab. • {
+          /* baños: si es dúplex y NO es el id 6, sumamos 1 */
+          apt.type === 'dúplex' && apt.id !== 6
             ? `${apt.rooms.length + 1} baños`
-            : `${apt.rooms.length} baño`}
-        </Typography>
+            : `${apt.rooms.length} baño${apt.rooms.length > 1 ? 's' : ''}`}
+      </Typography>
         <Typography variant="body2" color="text.secondary">
           {apt.description}
         </Typography>
